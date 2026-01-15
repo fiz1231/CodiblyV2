@@ -4,6 +4,6 @@ import java.util.List;
 
 
 
-public record DownloadData(List<Generation> generation) {
+public record DownloadData(List<Generation> data) {
     
 }

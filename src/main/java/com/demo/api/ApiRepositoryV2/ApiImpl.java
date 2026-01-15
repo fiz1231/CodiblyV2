@@ -10,6 +10,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Generation;
+import com.demo.dao.generationData.GenerationInput;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,17 +19,14 @@ public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
-    public List<Generation> getIntervalOfEnergyMix(String from , String to){
+    public List<Generation> getIntervalOfEnergyMix(String from , String to) throws IOException{
         
         
-        System.out.println("Execution : getIntervalOfEnergyMix");
+       System.out.println("Execution : getIntervalOfEnergyMix");
         String url = "https://api.carbonintensity.org.uk/generation/"+ from + "/" + to;// maybe use DateTimeFormatter?
-        DownloadData result = null;
-        StringBuffer response = new StringBuffer();
-        try{
         URL objUrl = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) objUrl.openConnection();
         
+        HttpsURLConnection con = (HttpsURLConnection) objUrl.openConnection();
         con.setRequestMethod("GET");       
         con.setRequestProperty("Accept", "application/json");
         
@@ -47,21 +45,16 @@ public class ApiImpl implements SimpleApi {
         }
        
         String inputLine;
-        
+        StringBuffer response = new StringBuffer();
  
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
         in.close();
-        result = objectMapper.readValue(response.toString(),new TypeReference<DownloadData>(){});
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-       
+        
+        DownloadData result = objectMapper.readValue(response.toString(),new TypeReference<DownloadData>(){});
        
         
-        return result.generation();
-
+        return result.data();
     }
 }

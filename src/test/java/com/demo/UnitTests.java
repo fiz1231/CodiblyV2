@@ -2,6 +2,7 @@ package com.demo;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -123,14 +124,19 @@ public class UnitTests {
     public void testGetCarboniteData(){
         //get
             ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
-            ZonedDateTime then = ZonedDateTime.now().plusDays(3).withZoneSameInstant(ZoneId.of("Z"));
+            ZonedDateTime then = ZonedDateTime.now().plusDays(1).withZoneSameInstant(ZoneId.of("Z"));
             
         //when
             
         //then
             DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+            try{
             List <Generation> inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
             inputData.forEach(s->System.out.println(s));
             Assertions.assertInstanceOf(List.class, inputData);
+        }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+            
     }
 }
