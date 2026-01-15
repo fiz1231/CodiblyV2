@@ -1,0 +1,6 @@
+1.Zrobić testy jednostkowe dla logiki biznesowe, ApiRepository
+2.Utworzyć bean dla ApiRepository +  
+2.1 Przetestować tworzenie beana+
+2.2 Poprawić mapowanie Jsona do obiektu+
+3.Połączyć ApiRepository z DataGetterExternalAPi
+4.Zapisać adres strony w osobnym pliku i wczytać go anotacją @Value

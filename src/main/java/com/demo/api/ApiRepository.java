@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import java.net.URL;
-
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.demo.dao.generationData.GenerationInput;
@@ -34,46 +33,18 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 @Configuration
-@AllArgsConstructor
 public  class  ApiRepository  {
+
+    @Bean
+    ApiRepository beanApiRepository(){
+        return new ApiRepository();
+    }
 
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
     
     List<ResponseGetIntervaOfEnnergyMix> getIntervalOfEnergyMix(String from , String to) throws IOException{
-        // URL obj = new URL("https://api.carbonintensity.org.uk/generation/"+ from + "/" + to);
-        // HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        // con.setRequestMethod("GET");
-        // int responseCode = con.getResponseCode();
-        // BufferedReader in = new BufferedReader(
-        //     new InputStreamReader(con.getInputStream()));
-        // String inputLine;
-        // StringBuffer response = new StringBuffer();
-        // while ((inputLine = in.readLine()) != null) {
-        //     response.append(inputLine);
-        // }
-        // in.close();
-        // System.out.println(response.toString());
-        // return response.toString();
         
-        
-        /*I dont know why but upper code downloaded from https://carbon-intensity.github.io/api-definitions/?java#get-generation works but down one doesnt. 
-        Why?
-        // DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        
-        // wr.flush();
-
-        // wr.close();
-
-        this lines couse problems
-
-        Why have I even write output stream to api?
-
-        Oh, now i remember
-
-        
-        
-         */
       
         System.out.println("Execution : getIntervalOfEnergyMix");
         String url = "https://api.carbonintensity.org.uk/generation/"+ from + "/" + to;// maybe use DateTimeFormatter?
@@ -85,11 +56,6 @@ public  class  ApiRepository  {
         
         
         con.setDoOutput(true);
-        // DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        
-        // wr.flush();
-
-        // wr.close();
         
         int responseCode = con.getResponseCode();
         System.out.println("\nSending 'GET' request to URL : " + url);
@@ -109,11 +75,8 @@ public  class  ApiRepository  {
             response.append(inputLine);
         }
         in.close();
-
-        //System.out.println(response.toString());
         
         GenerationInput result = objectMapper.readValue(response.toString(),new TypeReference<GenerationInput>(){});
-         System.out.println("dupa");
        
         
         return result.data();
