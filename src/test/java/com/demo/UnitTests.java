@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -24,6 +25,7 @@ import org.junit.*;
 import com.demo.api.ApiRepository;
 import com.demo.api.ApiRepositoryV2.*;
 import com.demo.api.InMemoryApiRepository;
+import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Generation;
 import com.demo.dao.generationData.GenerationMix;
 import com.demo.dao.generationData.GenerationOutput;
@@ -131,9 +133,30 @@ public class UnitTests {
         //then
             DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
             try{
-            List <Generation> inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
-            inputData.forEach(s->System.out.println(s));
-            Assertions.assertInstanceOf(List.class, inputData);
+            DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
+            Assertions.assertEquals(Boolean.FALSE, inputData.data().isEmpty());
+        }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+            
+    }
+    @Test
+    @Description("testing grouping generation based on day of the year")
+    public void testGroupIntervalsByDate(){
+        //get
+            ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
+            ZonedDateTime then = ZonedDateTime.now().plusDays(3).withZoneSameInstant(ZoneId.of("Z"));
+            
+        //when
+            
+        //then
+            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+            try{
+            DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
+            
+            Map<Integer,List<Generation>> testGrouping =  mockApiImpl.groupIntervalsByDate(inputData);
+            Assertions.assertEquals(3, testGrouping.keySet().size());
+            
         }catch(IOException e){
                 System.out.println(e.getMessage());
             }

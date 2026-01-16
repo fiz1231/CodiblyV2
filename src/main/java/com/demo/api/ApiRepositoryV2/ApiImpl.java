@@ -4,13 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Generation;
-import com.demo.dao.generationData.GenerationInput;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +24,30 @@ public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
-    public List<Generation> getIntervalOfEnergyMix(String from , String to) throws IOException{
+    public Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input){
+        
+        int current = ZonedDateTime.parse(input.data().getFirst().getFrom()).getDayOfYear();        
+        Map<Integer,List<Generation>> result = new HashMap<>();
+        int checked = 0;
+        result.putIfAbsent(current, new ArrayList<Generation>());
+
+        for (Generation generation :input.data()){
+            checked = ZonedDateTime.parse(generation.getFrom()).getDayOfYear();
+            if (current == checked){
+                result.get(checked).add(generation);
+            }
+            else{
+                current = ZonedDateTime.parse(generation.getFrom()).getDayOfYear();
+                result.putIfAbsent(checked, new ArrayList<Generation>());
+                
+            }
+        }
+        return result;
+    }
+
+
+
+    public DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException{
         
         
        System.out.println("Execution : getIntervalOfEnergyMix");
@@ -55,6 +83,6 @@ public class ApiImpl implements SimpleApi {
         DownloadData result = objectMapper.readValue(response.toString(),new TypeReference<DownloadData>(){});
        
         
-        return result.data();
+        return result;
     }
 }
