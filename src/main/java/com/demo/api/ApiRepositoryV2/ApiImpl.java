@@ -16,6 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Generation;
+import com.demo.dao.V2.GenerationMix;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,24 @@ public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
+    public Generation calculateAverageValues(List<Generation>input){
+            Generation result = input.getFirst();
+            for(int i=1;i<input.size();i++){
+                result.setTo(input.get(i).getTo());
+                List<GenerationMix> next = input.get(i).getGenerationmix();
+                
+                for(int j=0; j<next.size(); j++){
+                    if(next.get(j).getFuel().equals(result.getGenerationmix().get(j).getFuel())){
+                        result.getGenerationmix().get(j).setPerc(next.get(j).getPerc() + result.getGenerationmix().get(j).getPerc());
+                    }
+                }
+            }
+            result.getGenerationmix().forEach(x->x.setPerc(x.getPerc()/input.size()));
+
+            return result;
+    }
+
+
     public Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input){
         
         int current = ZonedDateTime.parse(input.data().getFirst().getFrom()).getDayOfYear();        

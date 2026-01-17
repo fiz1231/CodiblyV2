@@ -162,4 +162,27 @@ public class UnitTests {
             }
             
     }
+    @Test
+    @Description("testing the reduction of generation array so single generation element")
+    public void testgenerationReduction(){
+        //get
+            ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
+            ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
+            
+        //when
+            
+        //then
+            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+            try{
+            DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
+            
+            Map<Integer,List<Generation>> testGrouping =  mockApiImpl.groupIntervalsByDate(inputData);
+            Generation testAvarage = mockApiImpl.calculateAverageValues(testGrouping.get(testGrouping.keySet().toArray()[0]));
+            Assertions.assertEquals(Boolean.TRUE, testAvarage.getGenerationmix().getFirst().getPerc()<100);
+            
+        }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+            
+    }
 }
