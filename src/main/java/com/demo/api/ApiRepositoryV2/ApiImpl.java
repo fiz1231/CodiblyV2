@@ -24,7 +24,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    
+    public float calculateCleanEnergyPercent(Generation input){
+        float result=0;
+        for (GenerationMix key : input.getGenerationmix()){
+            if(List.of("biomass", "nuclear", "hydro", "wind", "solar").contains(key.getFuel())){
+                result+=key.getPerc();
+            }
+        }
+        return result;
+    }
+
+
     public Generation calculateAverageValues(List<Generation>input){
             Generation result = input.getFirst();
             for(int i=1;i<input.size();i++){

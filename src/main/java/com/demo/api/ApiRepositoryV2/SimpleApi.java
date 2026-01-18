@@ -14,4 +14,5 @@ public interface SimpleApi {
     DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException ;
     Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input);
     Generation calculateAverageValues(List<Generation>input);
+    float calculateCleanEnergyPercent(Generation input);
 }
