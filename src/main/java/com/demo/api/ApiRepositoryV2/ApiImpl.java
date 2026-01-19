@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.demo.dao.V2.DownloadData;
+import com.demo.dao.V2.Endpoint1;
 import com.demo.dao.V2.Generation;
 import com.demo.dao.V2.GenerationMix;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,6 +26,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    
+    
+    public List<Endpoint1> calculateAverageSharesForDays(ZonedDateTime from,  ZonedDateTime to){
+        DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+        DownloadData downloadData = null;
+        try{
+            downloadData = this.getIntervalOfEnergyMix(from.format(format), to.format(format));
+
+        }
+        catch (IOException e){
+            System.out.println(e.getStackTrace());
+        }
+
+        Map<Integer,List<Generation>> groupedIntervals = null;
+
+        if(downloadData != null){
+            groupedIntervals = this.groupIntervalsByDate(downloadData);
+        }
+       List<Endpoint1> results = new ArrayList<Endpoint1>(); 
+        if(groupedIntervals != null){
+            groupedIntervals.forEach((K,V)-> this.calculateAverageValues(V));
+            for (Integer key : groupedIntervals.keySet().stream().sorted().toList()){
+                Generation input = groupedIntervals.get(key).getFirst();
+                results.addLast(new Endpoint1(input ,this.calculateCleanEnergyPercent(input)));
+            }
+        }
+        return results;
+        
+        
+        
+
+    }
     public float calculateCleanEnergyPercent(Generation input){
         float result=0;
         for (GenerationMix key : input.getGenerationmix()){

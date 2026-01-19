@@ -26,6 +26,7 @@ import com.demo.api.ApiRepository;
 import com.demo.api.ApiRepositoryV2.*;
 import com.demo.api.InMemoryApiRepository;
 import com.demo.dao.V2.DownloadData;
+import com.demo.dao.V2.Endpoint1;
 import com.demo.dao.V2.Generation;
 import com.demo.dao.generationData.GenerationMix;
 import com.demo.dao.generationData.GenerationOutput;
@@ -208,5 +209,20 @@ public class UnitTests {
                 System.out.println(e.getMessage());
             }
             
+    }
+    @Test
+    @Description("testing endpoint 1 response")
+    public void testEndpiont1(){
+        //get
+            ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
+            ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
+        //when
+            List<Endpoint1> testEndpoint1 = mockApiImpl.calculateAverageSharesForDays(now, then);
+        //then
+
+            Assertions.assertNotNull(testEndpoint1);;
+            
+
+        
     }
 }

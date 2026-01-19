@@ -2,6 +2,12 @@
 2.Utworzyć bean dla ApiRepository +  
 2.1 Przetestować tworzenie beana+
 2.2 Poprawić mapowanie Jsona do obiektu+
-2.3 Poprawić grupowanie ze względu na datę
+2.3 Poprawić grupowanie ze względu na datę+
+2.4 Poprawić wyliczanie średniego procenta zielonej energii
 3.Połączyć ApiRepository z DataGetterExternalAPi
 4.Zapisać adres strony w osobnym pliku i wczytać go anotacją @Value
+5.dedykowanych propertiesów lub environmental variables dla adresu strony
+6.implementację dowolnego (custom validator, annotation validation lub nawet if-statements) mechanizmu walidacji danych wejściowych 
+7.Mechanizm CORS nie powinien opierać się na wildcard-owych ścieżkach tylko odpowiednio dobranych domenach zdefiniowanych np. w jakiejś formie properties
+8.Zamiast definiować konfigurację fasady w postaci statycznej metody – zapoznaj się ze sposobem definiowania Beanów korzystając z mechanizmu dependency injection
+9.Dać formatowanie daty do pliku properties 
