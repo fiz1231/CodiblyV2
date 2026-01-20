@@ -8,16 +8,20 @@ import java.util.Map;
 import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Endpoint1;
 import com.demo.dao.V2.Generation;
-import com.demo.dao.generationData.GenerationOutput;
+import com.demo.dao.generationData.ResponseGetIntervaOfEnnergyMix;
+import com.demo.dao.windonData.IntervalData;
+
 
 
 
 
 public interface SimpleApi {
-    DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException ;
-    Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input);
-    Generation calculateAverageValues(List<Generation>input);
-    float calculateCleanEnergyPercent(Generation input);
     List<Endpoint1> calculateAverageSharesForDays(ZonedDateTime from,  ZonedDateTime to);
+    float calculateCleanEnergyPercent(Generation input);
+    Generation calculateAverageValues(List<Generation>input);
+    Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input);
+    DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException ;
+
+    List<Generation> generateSumArray(DownloadData intervalDatas);
 
 }

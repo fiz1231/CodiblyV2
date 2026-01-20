@@ -19,6 +19,8 @@ import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Endpoint1;
 import com.demo.dao.V2.Generation;
 import com.demo.dao.V2.GenerationMix;
+import com.demo.dao.generationData.ResponseGetIntervaOfEnnergyMix;
+import com.demo.dao.windonData.IntervalData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,62 +55,7 @@ public class ApiImpl implements SimpleApi {
             }
         }
         return results;
-        
-        
-        
-
     }
-    public float calculateCleanEnergyPercent(Generation input){
-        float result=0;
-        for (GenerationMix key : input.getGenerationmix()){
-            if(List.of("biomass", "nuclear", "hydro", "wind", "solar").contains(key.getFuel())){
-                result+=key.getPerc();
-            }
-        }
-        return result;
-    }
-
-
-    public Generation calculateAverageValues(List<Generation>input){
-            Generation result = input.getFirst();
-            for(int i=1;i<input.size();i++){
-                result.setTo(input.get(i).getTo());
-                List<GenerationMix> next = input.get(i).getGenerationmix();
-                
-                for(int j=0; j<next.size(); j++){
-                    if(next.get(j).getFuel().equals(result.getGenerationmix().get(j).getFuel())){
-                        result.getGenerationmix().get(j).setPerc(next.get(j).getPerc() + result.getGenerationmix().get(j).getPerc());
-                    }
-                }
-            }
-            result.getGenerationmix().forEach(x->x.setPerc(x.getPerc()/input.size()));
-
-            return result;
-    }
-
-
-    public Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input){
-        
-        int current = ZonedDateTime.parse(input.data().getFirst().getFrom()).getDayOfYear();        
-        Map<Integer,List<Generation>> result = new HashMap<>();
-        int checked = 0;
-        result.putIfAbsent(current, new ArrayList<Generation>());
-
-        for (Generation generation :input.data()){
-            checked = ZonedDateTime.parse(generation.getFrom()).getDayOfYear();
-            if (current == checked){
-                result.get(checked).add(generation);
-            }
-            else{
-                current = ZonedDateTime.parse(generation.getFrom()).getDayOfYear();
-                result.putIfAbsent(checked, new ArrayList<Generation>());
-                
-            }
-        }
-        return result;
-    }
-
-
 
     public DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException{
         
@@ -148,4 +95,77 @@ public class ApiImpl implements SimpleApi {
         
         return result;
     }
+
+    public Map<Integer,List<Generation>> groupIntervalsByDate(DownloadData input){
+        
+        int current = ZonedDateTime.parse(input.data().getFirst().getFrom()).getDayOfYear();        
+        Map<Integer,List<Generation>> result = new HashMap<>();
+        int checked = 0;
+        result.putIfAbsent(current, new ArrayList<Generation>());
+
+        for (Generation generation :input.data()){
+            checked = ZonedDateTime.parse(generation.getFrom()).getDayOfYear();
+            if (current == checked){
+                result.get(checked).add(generation);
+            }
+            else{
+                current = ZonedDateTime.parse(generation.getFrom()).getDayOfYear();
+                result.putIfAbsent(checked, new ArrayList<Generation>());
+                
+            }
+        }
+        return result;
+    }
+
+    public Generation calculateAverageValues(List<Generation>input){
+            Generation result = input.getFirst();
+            for(int i=1;i<input.size();i++){
+                result.setTo(input.get(i).getTo());
+                List<GenerationMix> next = input.get(i).getGenerationmix();
+                
+                for(int j=0; j<next.size(); j++){
+                    if(next.get(j).getFuel().equals(result.getGenerationmix().get(j).getFuel())){
+                        result.getGenerationmix().get(j).setPerc(next.get(j).getPerc() + result.getGenerationmix().get(j).getPerc());
+                    }
+                }
+            }
+            result.getGenerationmix().forEach(x->x.setPerc(x.getPerc()/input.size()));
+
+            return result;
+    }
+
+    public float calculateCleanEnergyPercent(Generation input){
+        float result=0;
+        for (GenerationMix key : input.getGenerationmix()){
+            if(List.of("biomass", "nuclear", "hydro", "wind", "solar").contains(key.getFuel())){
+                result+=key.getPerc();
+            }
+        }
+        return result;
+    }
+
+    public List<Generation> generateSumArray(DownloadData input){
+        List<Generation> data = input.data();
+        Generation gen0,gen1 = null;
+        for(int index0=0, index1=1;index1<data.size(); index0++,index1++){
+            gen0 =data.get(index0);
+            gen1 =data.get(index1);
+
+            for(int genMix=0; genMix<gen0.getGenerationmix().size(); genMix++){
+                gen1.getGenerationmix().get(genMix).setPerc(
+                    gen1.getGenerationmix().get(genMix).getPerc() + gen0.getGenerationmix().get(genMix).getPerc()
+                );
+            }
+            
+        }
+        return data;
+    }
+
+    
+    
+
+    
+
+
+   
 }

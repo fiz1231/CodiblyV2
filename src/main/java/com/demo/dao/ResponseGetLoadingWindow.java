@@ -9,6 +9,4 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResponseGetLoadingWindow {
     private Integer hourWindow;
-
-   
 }

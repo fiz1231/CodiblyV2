@@ -225,4 +225,30 @@ public class UnitTests {
 
         
     }
+     @Test
+    @Description("testing endpoint 1 response")
+    public void testGenerateSumArray(){
+        //get
+            ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
+            ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
+            
+        //when
+            
+        //then
+            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+            try{
+            DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
+            
+            
+            List<Generation> testSumArray = mockApiImpl.generateSumArray(inputData);
+            
+            Assertions.assertEquals(Boolean.FALSE, testSumArray.isEmpty());
+            
+        }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+            
+
+        
+    }
 }
