@@ -23,5 +23,6 @@ public interface SimpleApi {
     DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException ;
 
     List<Generation> generateSumArray(DownloadData intervalDatas);
+    Generation findBestWindow(List<Generation> generations, int intervals);
 
 }

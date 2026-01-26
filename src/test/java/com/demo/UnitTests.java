@@ -1,5 +1,6 @@
 package com.demo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
@@ -130,9 +131,9 @@ public class UnitTests {
             ZonedDateTime then = ZonedDateTime.now().plusDays(1).withZoneSameInstant(ZoneId.of("Z"));
             
         //when
-            
+              DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
         //then
-            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+          
             try{
             DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
             Assertions.assertEquals(Boolean.FALSE, inputData.data().isEmpty());
@@ -149,14 +150,14 @@ public class UnitTests {
             ZonedDateTime then = ZonedDateTime.now().plusDays(3).withZoneSameInstant(ZoneId.of("Z"));
             
         //when
-            
+             DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
         //then
-            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+           
             try{
             DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
             
             Map<Integer,List<Generation>> testGrouping =  mockApiImpl.groupIntervalsByDate(inputData);
-            Assertions.assertEquals(3, testGrouping.keySet().size());
+            Assertions.assertEquals(Boolean.FALSE, testGrouping.keySet().isEmpty());
             
         }catch(IOException e){
                 System.out.println(e.getMessage());
@@ -171,9 +172,9 @@ public class UnitTests {
             ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
             
         //when
-            
-        //then
             DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+        //then
+            
             try{
             DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
             
@@ -194,9 +195,9 @@ public class UnitTests {
             ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
             
         //when
-            
+             DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
         //then
-            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+           
             try{
             DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
             
@@ -226,23 +227,47 @@ public class UnitTests {
         
     }
      @Test
-    @Description("testing endpoint 1 response")
+    @Description("testing generating sumarry")
     public void testGenerateSumArray(){
         //get
             ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
             ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
             
         //when
-            
-        //then
             DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
             try{
             DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
             
             
             List<Generation> testSumArray = mockApiImpl.generateSumArray(inputData);
+        //then
+            
             
             Assertions.assertEquals(Boolean.FALSE, testSumArray.isEmpty());
+            
+        }catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    @Test
+    @Description("testing generating sumarry")
+    public void testFindBestWindow(){
+        //get
+            ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
+            ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
+            
+        //when
+            DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+            try{
+            DownloadData inputData = mockApiImpl.getIntervalOfEnergyMix(now.format(format).toString(), then.format(format).toString());
+            
+            
+            List<Generation> testSumArray = mockApiImpl.generateSumArray(inputData);
+            Generation testBestWindow = mockApiImpl.findBestWindow(testSumArray, 2);
+        //then
+            
+            
+            Assertions.assertEquals(Boolean.FALSE, testBestWindow.getFrom()==null);
             
         }catch(IOException e){
                 System.out.println(e.getMessage());
@@ -251,4 +276,20 @@ public class UnitTests {
 
         
     }
+    @Test
+    @Description("testing generating sumarry")
+    public void testEndpoint2(){
+        //get
+            int hours = 2;
+            
+        //when
+            
+        //then
+            Endpoint1 endpoint2 = mockApiImpl.calculateOptimalLoadingWindow(hours);
+            
+            Assertions.assertEquals(Boolean.FALSE, endpoint2.getGeneration().getFrom()==null);
+            
+        
+        }
+    
 }

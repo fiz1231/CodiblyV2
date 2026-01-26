@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
-    
+    //Endpoint 1 
     public List<Endpoint1> calculateAverageSharesForDays(ZonedDateTime from,  ZonedDateTime to){
         DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
         DownloadData downloadData = null;
@@ -144,6 +145,37 @@ public class ApiImpl implements SimpleApi {
         return result;
     }
 
+    //EndPoint 2
+    public Endpoint1 calculateOptimalLoadingWindow(int hours){
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
+        ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
+        Endpoint1 result = new Endpoint1();
+        DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+        DownloadData downloadData = null;
+        try{
+            downloadData = this.getIntervalOfEnergyMix(now.format(format), then.format(format));
+
+        }
+        catch (IOException e){
+            System.out.println(e.getStackTrace());
+        }
+        List<Generation> sumArray = this.generateSumArray(downloadData);
+        Generation interval = findBestWindow(sumArray, hours*2);
+        try{
+            downloadData = this.getIntervalOfEnergyMix(interval.getFrom(), interval.getTo());
+        }
+        catch (IOException e){
+            System.out.println(e.getStackTrace());
+        }
+        if (downloadData!= null){
+            result.setGeneration(this.calculateAverageValues(downloadData.data()));
+            result.setGreenEnergyPercent(this.calculateCleanEnergyPercent(result.getGeneration()));
+        }
+        return result;
+        
+        
+    }
+
     public List<Generation> generateSumArray(DownloadData input){
         List<Generation> data = input.data();
         Generation gen0,gen1 = null;
@@ -160,6 +192,33 @@ public class ApiImpl implements SimpleApi {
         }
         return data;
     }
+
+    public Generation findBestWindow(List<Generation> sumaArray, int intervals){
+        Generation result = new Generation();
+        float bestResult = 0;
+        float averageValue = 0;
+        for(int from=0, to=intervals; to<sumaArray.size(); from++, to++){
+            Generation genFrom = sumaArray.get(from);
+            Generation genTo = sumaArray.get(to);    
+            for(int genMix = 0; genMix<genFrom.getGenerationmix().size(); genMix++){
+
+                if(genFrom.getGenerationmix().get(genMix).getFuel().equals(genTo.getGenerationmix().get(genMix).getFuel()) && List.of("biomass", "nuclear", "hydro", "wind", "solar").contains(genFrom.getGenerationmix().get(genMix).getFuel())){
+                    averageValue += (genTo.getGenerationmix().get(genMix).getPerc() - genFrom.getGenerationmix().get(genMix).getPerc())/intervals;
+                }
+            }
+            if(bestResult<averageValue){
+                    result.setFrom(genFrom.getFrom());
+                    result.setTo(genTo.getTo());
+                    bestResult = averageValue;
+                }
+                averageValue = 0;
+            
+        }
+        return result;
+
+    }
+
+
 
     
     
