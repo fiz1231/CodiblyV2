@@ -80,33 +80,7 @@ public class UnitTests {
        
         testFacade = FacadeConfiguration.createCodiblyFacade(testRepo);
     }
-    // @Test
-    // @Description("should return data for three days with calculated average shares of individual energy sources and the percentage of clean energy. ")
-    // public void testCalculateAverageSharesForDays(){
-    //     //get
-    //     float expectedOutput = 0.5f;
-    //     GenerationOutput testOutput;
-    //     //when
-    //     testOutput = testFacade.getData();
-    //     //then
-        
-    //     Assertions.assertThat(testOutput.data().getFirst().getCleanEnergyPercent()).isEqualTo(expectedOutput);
-    // }
-    // @Test
-    // @Description("should return data for three days with calculated average shares of individual energy sources and the percentage of clean energy. ")
-    // public void testGetLoadingWindow(){
-    //     //get
-    //     int testInput = 1;
-
-    //     WindonDataOutput testOutput;
-    //     System.out.println();
-    //     //when
-    //     testOutput = testFacade.getLoadinfWindown(testInput);
-    //     //then
-       
-    //     Assertions.assertThat(TimeUnit.SECONDS.toHours(ZonedDateTime.parse(testOutput.getTo()).toEpochSecond() - ZonedDateTime.parse(testOutput.getFrom()).toEpochSecond())).isEqualTo(testInput);
-
-    // }
+    
     
     @Test
     @Description("checking context for ApiRepository bean ")
