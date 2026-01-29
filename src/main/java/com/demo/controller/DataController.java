@@ -20,7 +20,7 @@ import com.demo.dao.DataDao;
 import com.demo.dao.generationData.GenerationOutput;
 import com.demo.dao.windonData.WindonDataOutput;
 
-@RestController
+// @RestController
 @RequestMapping("/v1/codibly")
 @AllArgsConstructor
 public class DataController {

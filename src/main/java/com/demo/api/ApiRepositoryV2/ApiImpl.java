@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
+import java.util.ResourceBundle;
+import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.demo.dao.V2.DownloadData;
@@ -62,7 +64,10 @@ public class ApiImpl implements SimpleApi {
         
         
        System.out.println("Execution : getIntervalOfEnergyMix");
-        String url = "https://api.carbonintensity.org.uk/generation/"+ from + "/" + to;// maybe use DateTimeFormatter?
+        
+       ResourceBundle rs = ResourceBundle.getBundle("Data",new Locale("en","GB"));
+       
+        String url = rs.getString("url")+ from + "/" + to;
         URL objUrl = new URL(url);
         
         HttpsURLConnection con = (HttpsURLConnection) objUrl.openConnection();
