@@ -7,12 +7,16 @@ import lombok.Setter;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotNull;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Generation {
+    @NotNull
     private String from;
+    @NotNull
     private String to;
     private List<GenerationMix> generationmix;
 }

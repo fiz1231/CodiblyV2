@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 
 import com.demo.service.serviceV2.Facade;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 import com.demo.dao.V2.Endpoint1;
 
@@ -38,8 +40,8 @@ public class Controller {
     
     @CrossOrigin
     @GetMapping("/getLoadingWindow/{timeWindow}")
-    public ResponseEntity<Endpoint1> getLoadingWindow(@PathVariable(name = "timeWindow") Integer timeWindow){
-        Endpoint1 body = facade.getLoadinfWindown(timeWindow.intValue());
+    public ResponseEntity<Endpoint1> getLoadingWindow(@PathVariable(name = "timeWindow")@Min(1) @Max(6) int timeWindow){
+        Endpoint1 body = facade.getLoadinfWindown(timeWindow);
         return ResponseEntity.ok(body);
     }
 }

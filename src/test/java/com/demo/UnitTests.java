@@ -96,6 +96,7 @@ public class UnitTests {
     @BeforeEach public void setUp(){
         mockApiImpl= new ApiImpl();
         mockApiImpl.setUrl("https://api.carbonintensity.org.uk/generation/");
+        mockApiImpl.setDateFormat(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz"));
     }
     @Test
     @Description("testing data downloading from external api https://api.carbonintensity.org.uk/generation/")

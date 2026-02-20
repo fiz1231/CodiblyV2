@@ -41,13 +41,12 @@ public class ApiImpl implements SimpleApi {
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     
     private String url;
-    
+    private DateTimeFormatter dateFormat;
     //Endpoint 1 
     public List<Endpoint1> calculateAverageSharesForDays(ZonedDateTime from,  ZonedDateTime to){
-        DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
         DownloadData downloadData = null;
         try{
-            downloadData = this.getIntervalOfEnergyMix(from.format(format), to.format(format));
+            downloadData = this.getIntervalOfEnergyMix(from.format(this.dateFormat), to.format(this.dateFormat));
 
         }
         catch (IOException e){
@@ -166,10 +165,10 @@ public class ApiImpl implements SimpleApi {
         ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"));
         ZonedDateTime then = ZonedDateTime.now().plusDays(2).withZoneSameInstant(ZoneId.of("Z"));
         Endpoint1 result = new Endpoint1();
-        DateTimeFormatter format =DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mmz");
+        
         DownloadData downloadData = null;
         try{
-            downloadData = this.getIntervalOfEnergyMix(now.format(format), then.format(format));
+            downloadData = this.getIntervalOfEnergyMix(now.format(this.dateFormat), then.format(this.dateFormat));
 
         }
         catch (IOException e){
