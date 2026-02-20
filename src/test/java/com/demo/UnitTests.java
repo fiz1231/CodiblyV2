@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Description;
-import org.junit.*;
 
 import com.demo.api.ApiRepository;
 import com.demo.api.ApiRepositoryV2.*;

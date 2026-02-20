@@ -4,6 +4,7 @@ import com.demo.dao.V2.Endpoint1;
 
 import java.util.List;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 
-@Service
+// @Service
 @AllArgsConstructor
 public class Facade {
     private final DataGetterExternalApi dataGetterExternalApi;

@@ -11,23 +11,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
+
+import org.springframework.stereotype.Component;
 
 import com.demo.dao.V2.DownloadData;
 import com.demo.dao.V2.Endpoint1;
 import com.demo.dao.V2.Generation;
 import com.demo.dao.V2.GenerationMix;
-import com.demo.dao.generationData.ResponseGetIntervaOfEnnergyMix;
-import com.demo.dao.windonData.IntervalData;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+@Component
 public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

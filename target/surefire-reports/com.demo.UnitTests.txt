@@ -1,4 +1,10 @@
 -------------------------------------------------------------------------------
 Test set: com.demo.UnitTests
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.467 s -- in com.demo.UnitTests
+Tests run: 9, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.652 s <<< FAILURE! -- in com.demo.UnitTests
+com.demo.UnitTests.testEndpoint2 -- Time elapsed: 0.012 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.demo.dao.V2.DownloadData.data()" because "input" is null
+	at com.demo.api.ApiRepositoryV2.ApiImpl.generateSumArray(ApiImpl.java:187)
+	at com.demo.api.ApiRepositoryV2.ApiImpl.calculateOptimalLoadingWindow(ApiImpl.java:169)
+	at com.demo.UnitTests.testEndpoint2(UnitTests.java:261)
+

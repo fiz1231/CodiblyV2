@@ -19,7 +19,7 @@ import com.demo.dao.V2.Endpoint1;
 
 
 @RestController
-@RequestMapping("/v1/codibly")
+@RequestMapping("/v2/codibly")
 @AllArgsConstructor
 public class Controller {
     private final Facade facade;
