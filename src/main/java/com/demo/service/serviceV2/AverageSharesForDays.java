@@ -16,6 +16,7 @@ import com.demo.dao.V2.Endpoint1;
 @Service
 @Qualifier("apiImpl")
 @AllArgsConstructor
+@ComponentScan("com.demo.api.ApiRepositoryV2")
 public class AverageSharesForDays {
     @Autowired
     private final ApiImpl apiImpl;

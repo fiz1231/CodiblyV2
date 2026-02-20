@@ -95,6 +95,7 @@ public class UnitTests {
     private ApiImpl mockApiImpl;
     @BeforeEach public void setUp(){
         mockApiImpl= new ApiImpl();
+        mockApiImpl.setUrl("https://api.carbonintensity.org.uk/generation/");
     }
     @Test
     @Description("testing data downloading from external api https://api.carbonintensity.org.uk/generation/")
@@ -250,7 +251,7 @@ public class UnitTests {
         
     }
     @Test
-    @Description("testing generating sumarry")
+    @Description("testing endpoint 2")
     public void testEndpoint2(){
         //get
             int hours = 2;

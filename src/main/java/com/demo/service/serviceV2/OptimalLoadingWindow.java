@@ -1,5 +1,6 @@
 package com.demo.service.serviceV2;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import com.demo.api.ApiRepositoryV2.ApiImpl;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@ComponentScan("com.demo.api.ApiRepositoryV2")
 public class OptimalLoadingWindow {
      private final ApiImpl apiRepository;
      public Endpoint1 getDataLoadingWindow(int windowDurationHours){

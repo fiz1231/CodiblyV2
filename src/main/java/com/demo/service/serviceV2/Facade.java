@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@ComponentScan("com.demo.service.serviceV2")
 public class Facade {
     private final AverageSharesForDays averageSharesForDays;
     private final OptimalLoadingWindow optimalLoadingWindow;

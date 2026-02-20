@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 
 import lombok.AllArgsConstructor;
@@ -21,6 +22,8 @@ import com.demo.dao.V2.Endpoint1;
 @RestController
 @RequestMapping("/v2/codibly")
 @AllArgsConstructor
+@ComponentScan("com.demo.service.serviceV2")
+@CrossOrigin(origins = "${cors.allowed.origins}", maxAge = 3600)
 public class Controller {
     private final Facade facade;
 

@@ -15,6 +15,9 @@ import java.util.ResourceBundle;
 import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.demo.dao.V2.DownloadData;
@@ -25,10 +28,19 @@ import com.demo.dao.V2.GenerationMix;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
+import lombok.Setter;
+
+
 @Component
+@Getter
+@Setter
 public class ApiImpl implements SimpleApi {
     
     private static ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    
+    private String url;
     
     //Endpoint 1 
     public List<Endpoint1> calculateAverageSharesForDays(ZonedDateTime from,  ZonedDateTime to){
@@ -60,12 +72,13 @@ public class ApiImpl implements SimpleApi {
 
     public DownloadData getIntervalOfEnergyMix(String from , String to) throws IOException{
         
-        
+        System.out.println("URL:"+this.url);
        System.out.println("Execution : getIntervalOfEnergyMix");
         
-       ResourceBundle rs = ResourceBundle.getBundle("Data",new Locale("en","GB"));
        
-        String url = rs.getString("url")+ from + "/" + to;
+       
+        String url = this.url + from + "/" + to;
+        System.out.println(url);
         URL objUrl = new URL(url);
         
         HttpsURLConnection con = (HttpsURLConnection) objUrl.openConnection();
@@ -218,10 +231,11 @@ public class ApiImpl implements SimpleApi {
             
         }
         return result;
-
+        
+        
     }
 
-
+  
 
     
     
